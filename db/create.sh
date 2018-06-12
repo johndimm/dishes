@@ -6,3 +6,4 @@ mysql < photo_review.sql
 mysql < uploaded_photo.sql
 mysql < etl.sql
 mysql < sp.sql
+mysql < create_vphoto.sql

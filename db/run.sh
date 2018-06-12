@@ -8,5 +8,8 @@ mysql < photo.sql
 # Import from yelp captions.
 #./import_yelp.sh
 
+./create.sh
+
 # Create count tables.
 ./build.sh
+
