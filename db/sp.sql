@@ -16,6 +16,8 @@ begin
   values
   (filename, dish, restaurant, rating, menu_item, description, comments, email)
   ;
+
+  call etl();
 end //
 delimiter ;
 
@@ -35,6 +37,7 @@ begin
   join business as b on b.id = bd.business_id
   join dish as d on d.id = bd.dish_id
   where pr.email=_email
+  order by pr.dt_created desc
   ;
 
 end //

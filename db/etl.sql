@@ -4,7 +4,7 @@ create procedure etl()
 begin
   insert into business
   (id, name)
-  select uuid(), restaurant
+  select to_base64(random_bytes(15)), restaurant
   from uploaded_photo as up
   left join business as b on b.name = up.restaurant
   where b.name is null
@@ -39,7 +39,7 @@ begin
   select up.filename, d.id, up.rating, up.menu_item, up.description, up.comments, up.email
   from uploaded_photo as up
   join dish as d on d.dish = up.dish
-  left join photo_review as pr on pr.id = up.filename
+  left join photo_review as pr on pr.photo_id = up.filename
   where up.dish != ''
   and up.restaurant != ''
   and pr.id is null
@@ -55,6 +55,8 @@ begin
   left join business_dish as bd on bd.photo_id = p.id
   where bd.photo_id is null
   ;
+
+  truncate uploaded_photo;
 
 end //
 delimiter ;

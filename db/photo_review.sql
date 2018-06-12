@@ -30,7 +30,9 @@ CREATE TABLE `photo_review` (
   menu_item varchar(255) DEFAULT NULL,
   description varchar(255) DEFAULT NULL,
   comments varchar(255) DEFAULT NULL,
-  email varchar(255) DEFAULT NULL
+  email varchar(255) DEFAULT NULL,
+  dt_created datetime default current_timestamp,
+  dt_modified datetime on update current_timestamp
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

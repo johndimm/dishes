@@ -8,6 +8,8 @@ create table dish
   dish varchar(255),
   inside_cnt int,
   source enum('exact','substring'),
+  dt_created datetime default current_timestamp,
+  dt_modified datetime on update current_timestamp,
   index idx_dish(inside_cnt)
 );
 

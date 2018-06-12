@@ -249,7 +249,7 @@ delimiter ;
 
 drop procedure if exists dishes;
 delimiter //
-create procedure dishes(_dummy int)
+create procedure dishes(_dummy varchar(32))
 begin
   #
   # Show all dishes, but filter out the ones starting with $ or a number.
