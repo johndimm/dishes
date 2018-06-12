@@ -300,6 +300,7 @@ var RelatedDishes = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({related: data});
       }.bind(this),
@@ -342,6 +343,7 @@ var DishPage = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({sample: data});
       }.bind(this),
@@ -358,6 +360,7 @@ var DishPage = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({results: data});
       }.bind(this),
@@ -410,6 +413,7 @@ var RelatedBusinesses = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({related: data});
       }.bind(this),
@@ -457,6 +461,7 @@ var BusinessPage = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
 
         // The first and only element of the array is about this business.
@@ -475,6 +480,7 @@ var BusinessPage = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({dishes: data});
       }.bind(this),
@@ -556,6 +562,7 @@ var SamplePage = React.createClass({
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         this.setState({sample: data});
       }.bind(this),
@@ -634,6 +641,7 @@ class ListAllDishes extends React.Component {
       dataType: 'text',
       cache: false,
       success: function(dataStr) {
+	if (dataStr === '') return;
         var data = JSON.parse(dataStr);
         var items = data.map(function(key, i) {
          return { id: key['dish'], label: key['dish'] };

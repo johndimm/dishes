@@ -98,24 +98,25 @@ class App extends React.Component {
     <div>
     <div id="upload_form">
     <form action="upload.php" method="post" encType="multipart/form-data">
-        <h1>Dishes</h1>
+        <h1><a href="index.html">Dishes</a></h1>
 
         <Stars num="3"/>
         <div className="form-fields">
             <FormFieldCookie name="Restaurant" required="1" />
             <FormFieldInput name="Dish" required="1"/>
+            <FormFieldCookie name="email" required="1" />
         </div>
 
-        <input type="file" name="uploaded_file" id="uploaded_file" accept="image/*" capture="environment" />
-        <br />
-        <input type="submit" className="submit"/>
+        <label className="cameraButton">Get a picture
+          <input type="file" name="uploaded_file" id="uploaded_file" accept="image/*" />
+	</label>
 
         <div className="form-fields">
             <FormFieldInput name="Menu Item" />
             <FormFieldTextarea name="Description" />
             <FormFieldTextarea name="Comments" />
-            <FormFieldCookie name="email" />
         </div>
+        <input type="submit" className="submit" value="Upload!" />
     </form>
     </div>
 

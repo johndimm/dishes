@@ -8,7 +8,7 @@ div {
 
 .form-fields {
   display: table;
-  margin-bottom: 10px;
+//  margin-bottom: 10px;
 }
 
 .form-field {
@@ -33,8 +33,9 @@ div {
 }
 
 .submit {
-  font-size: 16pt;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  font-size: 24pt;
+  border-width: 2px;
 }
 
 #upload_form {
@@ -54,4 +55,25 @@ div {
   margin-right: 2px;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+label.cameraButton {
+  display: inline-block;
+  margin: 1em 0;
+
+  /* Styles to make it look like a button */
+  padding: 0.5em;
+  border: 2px solid #666;
+  border-color: #EEE #CCC #CCC #EEE;
+  background-color: #DDD;
+}
+
+/* Look like a clicked/depressed button */
+label.cameraButton:active {
+  border-color: #CCC #EEE #EEE #CCC;
+}
+
+/* This is the part that actually hides the 'Choose file' text box for camera inputs */
+label.cameraButton input[accept*="image"] {
+  display: none;
 }

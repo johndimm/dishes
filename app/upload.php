@@ -30,14 +30,16 @@ function main() {
   $email = getParam("email", '');
 
   $sql = "call insert_photo('$basename', '$dish', '$restaurant', $rating, '$menu_item', '$description', '$comments', '$email');";
-  // echo $sql;
+//  echo $sql;
   dbGet($db, $sql);
 
-//  echo '<meta http-equiv="refresh" content="0; url=upload.html">';
+  echo '<meta http-equiv="refresh" content="0; url=index.html">';
 }
 
 function copyUploadedFile() {
   $field_name = "uploaded_file";
+
+//  var_dump($_FILES);
 
   $src_file = $_FILES[$field_name]["name"];
   $tmp_name = $_FILES[$field_name]["tmp_name"];
@@ -45,6 +47,10 @@ function copyUploadedFile() {
   $ext = pathinfo($src_file, PATHINFO_EXTENSION);
   $basename = uniqid() . "." . $ext; // basename($src_file);
   $target_file = $target_dir . $basename;
+
+  echo "name: $name, tmp_name: $tmp_name, target_file: $target_file";
+
+//  return $basename;
 
   if(move_uploaded_file($tmp_name, $target_file)) {
 //      echo "The file ".  $basename . " has been uploaded";
