@@ -200,13 +200,15 @@ begin
 #       p.caption, b.name as business_name, b.stars,
 #      count(*) as cnt
 
-		select d.dish, d.id as dish_id, b.name, p.id as photo_id, p.caption, bd.business_id
+		select d.dish, d.id as dish_id, b.name, p.id as photo_id, p.caption, bd.business_id,
+		  pr.menu_item, pr.description, pr.comments
         , count(*) as cnt, count(distinct b.name) as cnt_business
         from dish as d
         join business_dish_cnt as bdc on bdc.dish_id = d.id
         join business as b on b.id=bdc.business_id
         join business_dish as bd on bd.dish_id=bdc.dish_id and bd.business_id = bdc.business_id
         join photo as p on p.id=bd.photo_id
+        join photo_review as pr on pr.photo_id = bd.photo_id
         left join stopwords on stopwords.word = d.dish
         where d.source = 'exact'
         and stopwords.word is null

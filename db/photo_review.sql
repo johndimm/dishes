@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `photo_review`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `photo_review` (
-  `id` int primary key auto_increment,
+  `id` int not null auto_increment primary key,
   photo_id varchar(22) not null,
   dish_id varchar(22) NOT NULL,
   rating int,
@@ -32,7 +32,8 @@ CREATE TABLE `photo_review` (
   comments varchar(255) DEFAULT NULL,
   email varchar(255) DEFAULT NULL,
   dt_created datetime default current_timestamp,
-  dt_modified datetime on update current_timestamp
+  dt_modified datetime on update current_timestamp,
+  unique key idx_pr_photo(photo_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

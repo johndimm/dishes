@@ -22,27 +22,27 @@ begin
   group by dish
   ;
 
-  insert into photo
+  replace into photo
   (id, business_id, caption, label)
   select up.filename as id, b.id as business_id, '' as caption, 'food' as label
   from uploaded_photo up
   join business as b on b.name = up.restaurant
-  left join photo as p on p.id = up.filename
+#  left join photo as p on p.id = up.filename
   where up.dish != ''
   and up.restaurant != ''
-  and p.id is null
+#  and p.id is null
   ;
 
 
-  insert into photo_review
+  replace into photo_review
   (photo_id, dish_id, rating, menu_item, description, comments, email)
   select up.filename, d.id, up.rating, up.menu_item, up.description, up.comments, up.email
   from uploaded_photo as up
   join dish as d on d.dish = up.dish
-  left join photo_review as pr on pr.photo_id = up.filename
+#  left join photo_review as pr on pr.photo_id = up.filename
   where up.dish != ''
   and up.restaurant != ''
-  and pr.id is null
+#  and pr.id is null
   ;
 
   insert into business_dish
