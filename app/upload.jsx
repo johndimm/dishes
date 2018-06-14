@@ -28,6 +28,7 @@ class Stars extends React.Component {
     var star = '\u2736'; // '\ufe61'; // '\u2b50'; // '\u2606';
     return (
       <div className='stars_div'>
+        <input type="hidden" name="rating" value={this.state.num} />
         {
           dummy.map(function(key, i) {
               return ( <span key={i} onClick={function() {this.setNum(i + 1)}.bind(this)} className={key}>{star}</span> );
@@ -122,7 +123,9 @@ class FormFieldCookie extends React.Component {
 
 class EditFieldsRequired extends React.Component {
   render() {
-
+    var rating = 3;
+    if (this.props.data && this.props.data['stars'])
+      rating = this.props.data['stars'];
     return (
       <div>
         <div className="form-fields">
@@ -130,7 +133,7 @@ class EditFieldsRequired extends React.Component {
             <FormFieldInput name="Dish" fieldName="dish" required="1" data={this.props.data}/>
             <FormFieldCookie name="Email" fieldName="email" required="1" data={this.props.data} />
         </div>
-         <Stars num="3"/>
+         <Stars num={rating}/>
       </div>
      )
   }

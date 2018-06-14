@@ -37,6 +37,7 @@ function main() {
   $sql = "call insert_photo('$filename', '$dish', '$restaurant', $rating, '$menu_item', '$description', '$comments', '$email');";
 //  echo $sql;
   dbGet($db, $sql);
+//  var_dump($_POST);
 
   echo '<meta http-equiv="refresh" content="0; url=index.html">';
 }
