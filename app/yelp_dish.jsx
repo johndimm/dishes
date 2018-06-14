@@ -21,36 +21,6 @@ function getPhotoUrl(photo_id) {
 }
 
 //
-// Display stars below a business name.
-//
-var Stars = React.createClass({
-  render: function() {
-
-    var stars = parseFloat(this.props.num);
-    var num = Math.floor(stars);
-    var halfNeeded = (stars - num == 0.5);
-    var dummy = Array();
-    for (var i=1; i<=5; i++) {
-      if (i <= num)
-        dummy.push("starOn");
-      else if (i == num + 1 && halfNeeded)
-        dummy.push("starHalf");
-      else
-        dummy.push("starOff");
-    }
-    return (
-      <div className='stars_div'>
-        {
-          dummy.map(function(key, i) {
-              return ( <span key={i} className={key}>✭</span> );
-           })
-        }
-      </div>
-    );
-  }
-});
-
-//
 // Display name and stars for a business.
 //
 var Business = React.createClass({
@@ -81,7 +51,7 @@ var Business = React.createClass({
 var Viewer = React.createClass({
 
   getInitialState: function() {
-    return {idx: this.props.idx};
+    return {idx: this.props.idx, editing: false};
   },
 
   componentDidMount: function() {
@@ -106,9 +76,35 @@ var Viewer = React.createClass({
     this.setState({idx: Math.max(0, this.state.idx - 1)});
   },
 
+  edit: function() {
+    this.setState({editing: true});
+  },
+
+  cancelEdit: function() {
+    this.setState({editing: false});
+  },
+
   onClickDish: function() {
       // location.search = "?dish=" + this.dish;
       renderRoot(this.dish, '');
+  },
+
+  deleteReview: function(event) {
+    var row = this.props.data[this.state.idx];
+    event.preventDefault();
+
+    $.ajax({
+      url: "delete_review.php",
+      data: {'photo_id':row['photo_id']},
+      dataType: 'text',
+      cache: false,
+      success: function(dataStr) {
+        window.location.href = 'index.html';
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }
+    });
   },
 
 
@@ -131,6 +127,7 @@ var Viewer = React.createClass({
     }
   },
 
+
   render: function() {
        var row = this.props.data[this.state.idx];
        var url = '';
@@ -148,18 +145,40 @@ var Viewer = React.createClass({
          this.business_id = row['business_id'];
        }
 
-       return (
-         <div id="viewer_div" style={{'visibility':'hidden'}}>
-           <Business business_name={business_name} business_id={this.business_id} stars={stars} />
-
+       var image = (
            <div onClick={this.onClickDish}>
              <img id="viewer" src={url} />
              <div className='caption_text'>{caption}</div>
            </div>
+       );
+
+       if (this.state.editing)
+         image = (
+            <div id="upload_form">
+            <form action="upload.php" method="post" encType="multipart/form-data">
+
+                <img id="viewer" src={url} style={{'width':'200px'}}/>
+                <EditFieldsRequired data={row}/>
+                <EditFieldsOptional data={row}/>
+                <input type="hidden" name="filename" value={row['photo_id']} />
+
+                <button type="submit" value="Save">Save</button>
+                <button onClick={this.deleteReview}>Delete</button>
+                <button onClick={this.cancelEdit}>Cancel</button>
+            </form>
+            </div>
+         );
+
+       return (
+         <div id="viewer_div" style={{'visibility':'hidden'}}>
+           <Business business_name={business_name} business_id={this.business_id} stars={stars} />
+
+           {image}
 
            <div id="viewer_controls">
            <button onClick={this.previous}>previous</button>
            <button onClick={this.close}>close</button>
+           <button onClick={this.edit}>edit</button>
            <button onClick={this.next}>next</button>
            </div>
          </div>

@@ -10,12 +10,21 @@
     <script src="https://npmcdn.com/react-dom@15.6.2/dist/react-dom.js"></script>
     <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
 
-    <script type="text/babel" src="upload.jsx"></script>
+    <script  src="compiled/upload.js"></script>
     <script src="cookie.js"></script>
 
     <link rel="stylesheet" href="stars.css" />
     <link rel="stylesheet" href="upload.css" />
 
+    <script>
+        $(document).ready (function() {
+          renderUpload();
+        });
+
+        // Attach this function to the window object so it can be called
+        // from href="javascript:window.renderRoot..."
+        // Needed when using <script type="text/babel"...
+        window.renderUpload = renderUpload;
   </script>
 
 </head>

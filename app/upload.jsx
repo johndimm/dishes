@@ -61,7 +61,7 @@ class FormField extends React.Component {
 
 class FormFieldTextarea extends React.Component {
   render() {
-    var input = ( <textarea type="text" name={this.props.name}></textarea>  );
+    var input = ( <textarea type="text" name={this.props.fieldName}></textarea>  );
     return (
       <FormField name={this.props.name} input={input} required={this.props.required}/>
     )
@@ -69,8 +69,36 @@ class FormFieldTextarea extends React.Component {
 }
 
 class FormFieldInput extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      data: this.props.data
+    };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({data: nextProps.data});
+    this.updateFormElements(nextProps.data);
+    //setTimeout(function() {this.componentDidMount()}.bind(this), 0);
+  }
+
+  componentDidMount() {
+    // Need to wait until it's really mounted.
+    if (this.props.data != null)
+     setTimeout(function() {this.updateFormElements(this.props.data)}.bind(this), 0);
+  }
+
+  updateFormElements(row) {
+    if (row != null)
+    Object.keys(row).forEach(function(k,i) {
+      $("input[name=" + k).val(row[k]);
+      $("textarea[name=" + k).val(row[k]);
+    });
+  }
+
   render() {
-    var input = ( <input type="text" name={this.props.name} /> );
+    var input = ( <input type="text" name={this.props.fieldName} /> );
     return (
       <FormField name={this.props.name} input={input} required={this.props.required}/>
     )
@@ -79,16 +107,46 @@ class FormFieldInput extends React.Component {
 
 class FormFieldCookie extends React.Component {
   saveToCookie() {
-    createCookie(this.props.name, $("#" + this.props.name).val());
+    createCookie(this.props.fieldName, $("#" + this.props.fieldName).val());
   }
 
   render() {
-    var email = readCookie(this.props.name);
+    var cookieVal = readCookie(this.props.fieldName) || '';
     var input = ( <input type="text" onBlur={this.saveToCookie.bind(this)}
-      name={this.props.name} id={this.props.name} defaultValue={email} /> );
+      name={this.props.fieldName} id={this.props.fieldName} defaultValue={cookieVal} /> );
     return (
-      <FormField name={this.props.name} input={input} required={this.props.required}/>
+      <FormField name={this.props.name} fieldName={this.props.fieldName} input={input} required={this.props.required}/>
     )
+  }
+}
+
+class EditFieldsRequired extends React.Component {
+  render() {
+
+    return (
+      <div>
+        <div className="form-fields">
+            <FormFieldCookie name="Restaurant" fieldName="business_name" required="1" data={this.props.data}/>
+            <FormFieldInput name="Dish" fieldName="dish" required="1" data={this.props.data}/>
+            <FormFieldCookie name="Email" fieldName="email" required="1" data={this.props.data} />
+        </div>
+         <Stars num="3"/>
+      </div>
+     )
+  }
+}
+
+class EditFieldsOptional extends React.Component {
+  render() {
+    return (
+      <div>
+        <div className="form-fields">
+            <FormFieldInput name="Menu Item" fieldName="menu_item"/>
+            <FormFieldTextarea name="Description" fieldName="description"/>
+            <FormFieldTextarea name="Comments" fieldName="comments"/>
+        </div>
+      </div>
+     )
   }
 }
 
@@ -100,23 +158,14 @@ class App extends React.Component {
     <form action="upload.php" method="post" encType="multipart/form-data">
         <h1><a href="index.html">Dishes</a></h1>
 
-        <Stars num="3"/>
-        <div className="form-fields">
-            <FormFieldCookie name="Restaurant" required="1" />
-            <FormFieldInput name="Dish" required="1"/>
-            <FormFieldCookie name="email" required="1" />
-        </div>
-
         <label className="cameraButton">Get a picture
           <input type="file" name="uploaded_file" id="uploaded_file" accept="image/*" />
-	</label>
+	    </label>
 
-        <div className="form-fields">
-            <FormFieldInput name="Menu Item" />
-            <FormFieldTextarea name="Description" />
-            <FormFieldTextarea name="Comments" />
-        </div>
-        <input type="submit" className="submit" value="Upload!" />
+        <EditFieldsRequired />
+
+
+        <button type="submit" className="submit" value="Submit">Upload</button>
     </form>
     </div>
 
@@ -171,17 +220,8 @@ class UploadedPhotos extends React.Component {
   }
 }
 
-function renderRoot() {
+function renderUpload() {
   var domContainerNode = window.document.getElementById('root');
   ReactDOM.unmountComponentAtNode(domContainerNode);
   ReactDOM.render(<App />, domContainerNode);
 }
-
-$(document).ready (function() {
-  renderRoot();
-});
-
-// Attach this function to the window object so it can be called
-// from href="javascript:window.renderRoot..."
-// Needed when using <script type="text/babel"...
-window.renderRoot = renderRoot;

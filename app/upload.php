@@ -20,16 +20,21 @@ function main() {
 
   include "db.php";
   $db = dbInit();
-  $basename = copyUploadedFile();
-  $dish = getParam("Dish", '');
-  $restaurant = getParam("Restaurant", '');
-  $rating = getParam("Rating", 3);
-  $menu_item = getParam("Menu Item", '');
-  $description = getParam("Description", '');
-  $comments = getParam("Comments", '');
+
+  $dish = getParam("dish", '');
+  $restaurant = getParam("business_name", '');
+  $rating = getParam("rating", 3);
+  $menu_item = getParam("menu_item", '');
+  $description = getParam("description", '');
+  $comments = getParam("comments", '');
   $email = getParam("email", '');
 
-  $sql = "call insert_photo('$basename', '$dish', '$restaurant', $rating, '$menu_item', '$description', '$comments', '$email');";
+  $filename = getParam('filename', '');  // If this is defined, we are updating a record.
+  if ($filename == '') {
+    $filename = copyUploadedFile();
+  }
+
+  $sql = "call insert_photo('$filename', '$dish', '$restaurant', $rating, '$menu_item', '$description', '$comments', '$email');";
 //  echo $sql;
   dbGet($db, $sql);
 
@@ -38,6 +43,10 @@ function main() {
 
 function copyUploadedFile() {
   $field_name = "uploaded_file";
+
+  if (! array_key_exists($field_name, $_FILES)) {
+    return '';
+  }
 
 //  var_dump($_FILES);
 
@@ -48,7 +57,7 @@ function copyUploadedFile() {
   $basename = uniqid() . "." . $ext; // basename($src_file);
   $target_file = $target_dir . $basename;
 
-  echo "name: $name, tmp_name: $tmp_name, target_file: $target_file";
+ // echo "src_file: $src_file, tmp_name: $tmp_name, target_file: $target_file";
 
 //  return $basename;
 
